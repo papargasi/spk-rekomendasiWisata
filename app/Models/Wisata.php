@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wisata extends Model
 {
-        protected $fillable = ['nama', 'jenis', 'lokasi', 'deskripsi', 'gambar'];
+protected $fillable = ['nama', 'deskripsi', 'latitude', 'longitude', 'rating', 'gambar'];
 
     public function penilaian()
     {
