@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('wisatas', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->enum('jenis', ['alam', 'religi', 'sejarah']);
             $table->text('deskripsi')->nullable();
-            $table->string('lokasi')->nullable(); // Bisa URL Google Maps
-            $table->string('gambar')->nullable(); // Path gambar
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
+            $table->float('rating')->default(0);
+            $table->string('gambar')->nullable();
             $table->timestamps();
         });
     }
