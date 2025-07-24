@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penilaian', function (Blueprint $table) {
+        Schema::create('penilaians', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('wisata_id')->constrained('wisata')->onDelete('cascade');
+            $table->foreignId('wisata_id')->constrained('wisatas')->onDelete('cascade');
             $table->decimal('rating', 3, 2);      // Contoh: 4.5
             $table->decimal('jarak', 5, 2);       // Dalam km misalnya
             $table->decimal('kebersihan', 3, 2);  // Skor 1-5

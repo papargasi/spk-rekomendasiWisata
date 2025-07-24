@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bobot_kriteria', function (Blueprint $table) {
+        Schema::create('bobot_kriterias', function (Blueprint $table) {
             $table->id();
             $table->enum('kriteria', ['rating', 'jarak', 'kebersihan'])->unique();
             $table->decimal('bobot', 4, 2); // Contoh: 0.40, 0.30
