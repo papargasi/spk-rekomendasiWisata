@@ -38,7 +38,7 @@ return view('rekomendasi', compact( 'wisataData'));
 
     Wisata::create($data);
 
-    return redirect('create')->with('success', 'Data wisata berhasil ditambahkan!');
+    return redirect('rekomendasi')->with('success', 'Data wisata berhasil ditambahkan!');
 }
 }
 
