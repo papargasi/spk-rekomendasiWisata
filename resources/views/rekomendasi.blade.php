@@ -1,27 +1,117 @@
 @extends('welcome')
 
 @section('content')
-<div class="max-w-6xl mx-auto py-8 px-4">
-    <h2 class="text-2xl font-bold mb-6 text-center">Top Picks Wisata</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wisata Ciayumajakuning - Peta Gratis</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #map { height: 500px; width: 100%; margin-top: 10px; }
+    #info { margin-top: 10px; }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach ($hasil as $wisata)
-        <div class="bg-white shadow-md rounded-xl p-5 border border-gray-200 hover:shadow-lg transition">
-            <h3 class="text-lg font-semibold mb-2 text-indigo-600">{{ $wisata->nama }}</h3>
-            <span class="text-sm text-gray-500 px-2 py-1 bg-gray-100 rounded-full">{{ ucfirst($wisata->jenis) }}</span>
+<h2>Peta Wisata Ciayumajakuning (Gratis Tanpa Google)</h2>
+<p>Wilayah: Cirebon, Indramayu, Majalengka, Kuningan, Subang</p>
 
-            <div class="mt-4 text-sm space-y-1">
-                <p>📊 Rating: <span class="font-medium">{{ $wisata->penilaian->rating }}</span></p>
-                <p>📍 Jarak: <span class="font-medium">{{ $wisata->penilaian->jarak }} km</span></p>
-                <p>🧼 Kebersihan: <span class="font-medium">{{ $wisata->penilaian->kebersihan }}</span></p>
-            </div>
+<div id="map"></div>
+<div id="info"></div>
 
-            <div class="mt-4">
-                <strong class="text-md">⭐ Skor SMART:</strong>
-                <span class="text-xl font-bold text-green-600">{{ number_format($wisata->penilaian->nilai_total, 2) }}</span>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const map = L.map('map').setView([-6.75, 108.4], 9); // Tengah Ciayumajakuning
+
+  // Tambahkan tile OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Lokasi asal default (Kota Cirebon)
+  const origin = L.latLng(-6.732023, 108.552315);
+  L.marker(origin).addTo(map).bindPopup("Lokasi Anda (Cirebon)").openPopup();
+
+  // Daftar lokasi wisata (contoh dummy, bisa kamu ganti)
+  const wisataList = [
+    {
+      nama: "Keraton Kasepuhan",
+      kota: "Cirebon",
+      lat: -6.739660,
+      lon: 108.574396,
+      rating: 4.6,
+      gambar: "https://via.placeholder.com/150"
+    },
+    {
+      nama: "Pantai Balongan Indah",
+      kota: "Indramayu",
+      lat: -6.321972,
+      lon: 108.373794,
+      rating: 4.2,
+      gambar: "https://via.placeholder.com/150"
+    },
+    {
+      nama: "Curug Ibun Pelangi",
+      kota: "Majalengka",
+      lat: -6.835416,
+      lon: 108.326273,
+      rating: 4.8,
+      gambar: "https://via.placeholder.com/150"
+    },
+    {
+      nama: "Telaga Remis",
+      kota: "Kuningan",
+      lat: -6.902081,
+      lon: 108.474619,
+      rating: 4.4,
+      gambar: "https://via.placeholder.com/150"
+    },
+    {
+      nama: "Capolaga Adventure Camp",
+      kota: "Subang",
+      lat: -6.706179,
+      lon: 107.686579,
+      rating: 4.7,
+      gambar: "https://via.placeholder.com/150"
+    }
+  ];
+
+  // Tampilkan semua marker wisata
+  wisataList.forEach((wisata) => {
+    const dest = L.latLng(wisata.lat, wisata.lon);
+
+    const marker = L.marker(dest).addTo(map).bindPopup(`
+      <b>${wisata.nama}</b><br>
+      Lokasi: ${wisata.kota}<br>
+      Rating: ${wisata.rating} ⭐<br>
+      <img src="${wisata.gambar}" width="150" />
+    `);
+
+    // Garis & jarak dari origin ke setiap lokasi
+    fetch(`https://router.project-osrm.org/route/v1/driving/${origin.lng},${origin.lat};${dest.lng},${dest.lat}?overview=false`)
+      .then(res => res.json())
+      .then(route => {
+        if (route.routes && route.routes.length > 0) {
+          const distance = route.routes[0].distance / 1000;
+          const duration = route.routes[0].duration / 60;
+
+          const popupContent = `
+            <b>${wisata.nama}</b><br>
+            Lokasi: ${wisata.kota}<br>
+            Rating: ${wisata.rating} ⭐<br>
+            <img src="${wisata.gambar}" width="150" /><br>
+            <strong>Jarak:</strong> ${distance.toFixed(1)} km<br>
+            <strong>Waktu tempuh:</strong> ${duration.toFixed(1)} menit
+          `;
+          marker.bindPopup(popupContent);
+        }
+      });
+  });
+</script>
+
+</body>
+</html>
+
 @endsection
