@@ -101,6 +101,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="/create" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                Input data OWI
+              </p>
+            </a>
+          </li>
           <li class="nav-header">Ga penting, tapi...</li>
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
