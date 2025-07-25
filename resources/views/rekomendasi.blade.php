@@ -1,4 +1,4 @@
-    @extends('welcome')
+@extends('layout')
 
     @section('content')
         <h2>Peta Wisata Ciayumajakuning (Gratis Tanpa Google)</h2>
@@ -17,10 +17,36 @@
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    const origin = L.latLng(-6.732023, 108.552315);
-    L.marker(origin).addTo(map).bindPopup("Lokasi Anda (Cirebon)").openPopup();
+    let origin;
 
-    const wisataList = @json($wisataData); // dari controller Laravel ke JavaScript
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        origin = L.latLng(lat, lng);
+
+        L.marker(origin).addTo(map).bindPopup("Lokasi Anda Sekarang").openPopup();
+        map.setView(origin, 12); // Zoom ke lokasi pengguna
+
+        // Setelah origin ditentukan, jalankan fungsi tampilkan marker wisata
+        tampilkanWisata(origin);
+    }, function (error) {
+        alert("Gagal mendapatkan lokasi: " + error.message);
+        // fallback: pakai Cirebon
+        origin = L.latLng(-6.732023, 108.552315);
+        L.marker(origin).addTo(map).bindPopup("Lokasi Default (Cirebon)").openPopup();
+        tampilkanWisata(origin);
+    });
+} else {
+    alert("Browser tidak mendukung geolokasi.");
+    origin = L.latLng(-6.732023, 108.552315);
+    L.marker(origin).addTo(map).bindPopup("Lokasi Default (Cirebon)").openPopup();
+    tampilkanWisata(origin);
+}
+
+// Fungsi menampilkan wisata setelah dapat lokasi user
+function tampilkanWisata(origin) {
+    const wisataList = @json($wisataData);
 
     wisataList.forEach((wisata) => {
         const dest = L.latLng(wisata.latitude, wisata.longitude);
@@ -49,6 +75,8 @@
                 }
             });
     });
+}
+
 </script>
 
     @endsection

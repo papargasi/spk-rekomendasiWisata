@@ -1,6 +1,6 @@
 <!-- isi halaman index -->
 
-@extends('layout')
+@extends('welcome')
 
 @section('content')
       <!-- Content Wrapper. Contains page content -->
