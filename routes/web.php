@@ -15,3 +15,4 @@ Route::post('/store', [RekomendasiController::class, 'store'])->name('wisata.sto
 //route data objek wisata
 Route::get('/dataOwi', [OwiController::class, 'index'])->name('wisata.index');
 Route::get('/detailOwi/{id}', [OwiController::class, 'detailOwi'])->name('wisata.detail');
+Route::get('/edit/detailOwi/{id}', [OwiController::class, 'detailInfoOwi'])->name('wisata.detail.info');

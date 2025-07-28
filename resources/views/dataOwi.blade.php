@@ -1,38 +1,59 @@
 @extends('layout')
+@section('tittle', '| Data Objek Wisata')
 @section('content')
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-1">
-            <div class="col-sm-6 mb-2">
-                <h1><strong>Tabel data objek Wisata</strong></h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active"><a href="#" style="color:grey">Home</a></li>
-                    <li class="breadcrumb-item">Tabel data OWI</li>
-                </ol>
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Tabel data objek wisata</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#"  class="text-decoration-none" style="color:grey">Home</a></li>
+                        <li class="breadcrumb-item active">Tabel data OWI</li>
+                    </ol>
+                </div>
             </div>
             <div class="row">
-                <a href="{{route('wisata.create')}}" class="btn btn-success btn-sm mr-2"><strong>Tambah data</strong></a>
-                <a href="#" class="btn btn-info btn-sm"><strong>Edit data</strong></a>
+                <div class="col-12 col-sm-6 col-md-4 h-100">
+                    <a href="{{ route('wisata.create') }}"  class="text-decoration-none" style="color:black">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-success elevation-1" id="edit-icon"><i class="fas fa-plus"></i></span>
+                            <div class="info-box-content equal-box">
+                                <span class="info-box-number" id="edit-text">Tambah data</span>
+                                <span class="info-box-text" id="edit-text-kecil">Ketuk untuk menambah</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 h-100">
+                    <a href="#" class="text-decoration-none" style="color:black">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-info elevation-1" id="edit-icon"><i class="fas fa-edit"></i></span>
+                            <div class="info-box-content equal-box">
+                                <span class="info-box-number" id="edit-text">Edit data</span>
+                                <span class="info-box-text" id="edit-text-kecil">Ketuk untuk mengedit</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header"></div>
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                          <th>Nama OWI</th>
-                          <th>Rating OWI</th>
-                          <th>Longitude</th>
-                          <th>Latitude</th>
-                          <th>Detail</th>
-                        </tr>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                <div class="card-header"></div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nama OWI</th>
+                                <th>Rating OWI</th>
+                                <th>Longitude</th>
+                                <th>Latitude</th>
+                                <th>Detail</th>
+                            </tr>
                     </thead>
                     <tbody>
                         @foreach($data as $data)
@@ -51,4 +72,6 @@
         </div>
     </div>
 </div>
+</div>
+</section>
 @endsection

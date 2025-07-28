@@ -1,4 +1,5 @@
 @extends('layout')
+@section('tittle', '| Detail Objek Wisata')
 @section('content')
 <section class="content-header">
     <div class="container-fluid">
@@ -8,8 +9,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#" style="color:grey">Home</a></li>
-                    <li class="breadcrumb-item"><a href="/dataOwi" style="color:grey">Tabel data OWI</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none" style="color:grey">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/dataOwi" style="color:grey" class="text-decoration-none">Tabel data OWI</a></li>
                     <li class="breadcrumb-item  active">Detail data {{$data->nama}}</li>
                 </ol>
             </div>
@@ -24,16 +25,19 @@
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="text-center">
-                  <img class="profile-user-img img-fluid img-circle"
-                       src="../../dist/img/user4-128x128.jpg"
-                       alt="User profile picture">
+                @if($data->foto->isNotEmpty())
+                    <img class="profile-user-img img-fluid img-circle"
+                        src="{{ asset('storage/wisata/'.$data->foto[0]->nm_foto) }}"
+                        alt="User profile picture"
+                        style="width: 128px; height: 128px; object-fit: cover;">
+                @endif
                 </div>
 
                 <h3 class="profile-username text-center">{{ $data->nama }}</h3>
 
                 <p class="text-muted text-center">Objek wisata Ciayumajakuning</p>
 
-                <a href="#" class="btn btn-success btn-block"><b>Perbarui data</b></a>
+                <button class="btn btn-success btn-block" onclick="openModal()"><b>Perbarui data</b></button>
               </div>
               <!-- /.card-body -->
             </div>
@@ -89,7 +93,17 @@
           <p>{{$data->deskripsi}}</p>
         </div>
         <div class="tab-pane fade" id="galeri" role="tabpanel">
-          <p>Ini konten Galeri.</p>
+          @if($data->foto->count())
+              <div class="row">
+                  @foreach($data->foto as $foto)
+                      <div class="col-md-3 mb-3">
+                          <img src="{{ asset('storage/wisata/'.$foto->nm_foto) }}" alt="foto" class="img-fluid rounded shadow-sm" style="height: 150px;width:100%">
+                      </div>
+                  @endforeach
+              </div>
+          @else
+              <p class="text-muted">Belum ada foto untuk objek wisata ini.</p>
+          @endif
         </div>
         <div class="tab-pane fade" id="peta" role="tabpanel">
           <!-- HTML -->
@@ -177,7 +191,28 @@
       });
     });
   });
+
+  // fungsi panggil modal edit
+  function openModal() {
+    const modal = document.getElementById('updateModal');
+    modal.style.display = 'flex';
+}
+
+function closeModal(e) {
+    const modal = document.getElementById('updateModal');
+    modal.classList.remove('animate-fade');
+    modal.style.display = 'none';
+}
 </script>
+
+<!-- Modal -->
+<div id="updateModal" class="custom-modal" onclick="closeModal(event)">
+    <div class="custom-modal-content animate-fade" onclick="event.stopPropagation()">
+        <h3>Edit data objek wisata <br> <b>{{$data->nama}}</b></h3>
+        <a href="{{route('wisata.detail.info',['id'=>$data->id])}}" class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Informasi</a>
+        <button class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Rating</button>
+        <button class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Foto</button>
+    </div>
+</div>
+
 @endsection
-          <!-- /.col -->
-        <!-- /.row -->

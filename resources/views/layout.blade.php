@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rekomendasi Wisata Online</title>
+  <title>ROWO.ID @yield('tittle')</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -13,6 +13,82 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+        .custom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .custom-modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        width: 400px; /* ubah dari misalnya 300px */
+        max-width: 90%; /* agar responsif di mobile */
+        text-align: center;
+    }
+
+    .animate-fade {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    .custom-btn {
+        display: inline-flex;
+        align-items: center;
+        border: none;
+        border-radius: 18px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .custom-btn .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 16px 0 0 16px;
+        font-size: 24px;
+        background-color: rgba(255,255,255,0.2);
+    }
+    .custom-btn .text {
+        padding-left: 15px;
+        padding-right: 10px;
+    }
+
+    /* Hijau - Tambah data */
+    .custom-btn.tambah {
+        background: linear-gradient(to right, #28a745 30%, #1d6c3e);
+    }
+
+    /* Biru - Edit data */
+    .custom-btn.edit {
+        background: linear-gradient(to right, #5ce6ff 30%, #00c4ff);
+    }
+
+    .custom-btn:hover {
+        opacity: 0.9;
+        text-decoration: none;
+    }
+    </style>
+
+
   <!-- Bootstrap (wajib jika belum ada) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

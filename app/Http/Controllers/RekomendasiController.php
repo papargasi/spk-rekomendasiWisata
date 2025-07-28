@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Wisata;
+use App\Models\foto;
 use App\Models\BobotKriteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

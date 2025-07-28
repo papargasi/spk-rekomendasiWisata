@@ -1,34 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Wisata;
+
 use App\Models\foto;
 use Illuminate\Http\Request;
 
-class OwiController extends Controller
+class FotoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = Wisata::all();
-        return view('dataOwi',compact('data'));
+        //
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function detailOwi($id)
-    {
-        $data = Wisata::with('foto')->findOrFail($id);
-        return view('detailDataOwi', compact('data'));
-    }
-    public function detailInfoOwi($id)
-    {
-        $data = Wisata::findOrFail($id);
-        return view('updateOwi.edit_info_owi', compact('data'));
-    }
     public function create()
     {
         //
@@ -45,7 +34,7 @@ class OwiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(foto $foto)
     {
         //
     }
@@ -53,7 +42,7 @@ class OwiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(foto $foto)
     {
         //
     }
@@ -61,7 +50,7 @@ class OwiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, foto $foto)
     {
         //
     }
@@ -69,7 +58,7 @@ class OwiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(foto $foto)
     {
         //
     }

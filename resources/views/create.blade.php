@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('tittle', '| Tambah data')
 @section('content')
 <section class="content-header">
     <div class="container-fluid">
@@ -9,8 +9,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#" style="color:grey">Home</a></li>
-                    <li class="breadcrumb-item"><a href="/dataOwi" style="color:grey">Tabel data OWI</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none" style="color:grey">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/dataOwi" class="text-decoration-none" style="color:grey">Tabel data OWI</a></li>
                     <li class="breadcrumb-item active">Tambah data OWI</li>
                 </ol>
             </div>
@@ -66,10 +66,45 @@
                     <div id="foto-step" class="content" role="tabpanel">
                         <div class="mb-3">
                             <label>Upload Foto Objek Wisata</label>
-                            <input type="file" class="form-control" name="foto[]" multiple accept="image/*" required>
+                            <input type="file" class="form-control" id="fotoInput" accept="image/*">
+                            <small class="text-muted">Pilih satu per satu. Semua gambar akan ditampilkan di bawah.</small>
                         </div>
-                        <button type="button" class="btn btn-secondary" onclick="stepper.previous()">Sebelumnya</button>
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Lanjut</button>
+
+                        <!-- Counter -->
+                        <div class="mb-2">
+                            <strong>Total Foto: <span id="fotoCounter">0</span></strong>
+                        </div>
+
+                        <!-- Scrollable table -->
+                        <div class="card">
+                            <div class="card-header"></div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                                    <table class="table m-0 table-striped table-sm" id="fotoTable">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 120px;">Preview</th>
+                                                <th>Nama File</th>
+                                                <th style="width: 80px;">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="noFotoRow">
+                                                <td colspan="3" class="text-center text-muted">Belum ada foto objek terpilih</td>
+                                            </tr>
+                                            <!-- Baris akan ditambahkan via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer"></div>
+                        </div>
+                                
+                        <!-- Hidden input container -->
+                        <div id="fotoHiddenContainer"></div>
+
+                        <button type="button" class="btn btn-secondary mt-3" onclick="stepper.previous()">Sebelumnya</button>
+                        <button type="button" class="btn btn-primary mt-3" onclick="stepper.next()">Lanjut</button>
                     </div>
     
                     <!-- Step 3 -->
@@ -97,44 +132,26 @@
 
 {{-- Step Navigation Script + Map --}}
 <script>
-    let stepper;
+    let map;
+    let marker;
+    let mapInitialized = false;
+
     document.addEventListener('DOMContentLoaded', function () {
         stepper = new window.Stepper(document.querySelector('#stepper'));
 
-        // Inisialisasi peta hanya saat langkah ke-3 ditampilkan
-        const mapContainer = document.getElementById('map');
-        let mapInitialized = false;
+        // Deteksi saat tombol ke step peta diklik
         document.querySelector('[data-target="#map-step"]').addEventListener('click', function () {
-            if (!mapInitialized) {
-                const map = L.map('map').setView([-6.75, 108.4], 9);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(map);
-
-                let marker;
-
-                map.on('click', function (e) {
-                    const lat = e.latlng.lat.toFixed(6);
-                    const lng = e.latlng.lng.toFixed(6);
-
-                    document.getElementById('latitude').value = lat;
-                    document.getElementById('longitude').value = lng;
-
-                    if (marker) {
-                        marker.setLatLng(e.latlng);
-                    } else {
-                        marker = L.marker(e.latlng).addTo(map);
-                    }
-                });
-
-                mapInitialized = true;
-            }
+            setTimeout(() => {
+                if (!mapInitialized) {
+                    initMap(); // Inisialisasi peta pertama kali
+                } else {
+                    map.invalidateSize(); // Refresh ukuran peta jika sudah ada
+                }
+            }, 300); // Delay untuk memastikan layout sudah ditampilkan
         });
     });
 
-     let map, marker;
-
-    document.addEventListener('DOMContentLoaded', function () {
+    function initMap() {
         map = L.map('map').setView([-6.75, 108.4], 9);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -155,16 +172,73 @@
             }
         });
 
-        // Jika pengguna langsung ke step 3, pastikan map di-render ulang
-        const observer = new MutationObserver(() => {
-            if (document.getElementById('step-3').classList.contains('active')) {
-                setTimeout(() => {
-                    map.invalidateSize();
-                }, 100);
-            }
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
+        mapInitialized = true;
+    }
+
+// script pengurus gammbar
+let fotoFiles = [];
+
+    document.getElementById('fotoInput').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            fotoFiles.push(file);
+            updateFotoTable();
+        }
+        e.target.value = ''; // agar bisa pilih file yang sama lagi
     });
+
+    function updateFotoTable() {
+        const tableBody = document.querySelector('#fotoTable tbody');
+        const hiddenContainer = document.getElementById('fotoHiddenContainer');
+        const fotoCounter = document.getElementById('fotoCounter');
+
+        tableBody.innerHTML = '';
+        hiddenContainer.innerHTML = '';
+        fotoCounter.textContent = fotoFiles.length;
+
+        if (fotoFiles.length === 0) {
+            const row = document.createElement('tr');
+            row.id = 'noFotoRow';
+            row.innerHTML = `
+                <td colspan="3" class="text-center text-muted">Belum ada foto objek terpilih</td>
+            `;
+            tableBody.appendChild(row);
+            return;
+        }
+
+        fotoFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><img src="${e.target.result}" class="img-thumbnail" width="100"/></td>
+                    <td>${file.name}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFoto(${index})">Hapus</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            };
+            reader.readAsDataURL(file);
+
+            // Hidden input untuk form
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.name = 'foto[]';
+            input.files = dt.files;
+            input.style.display = 'none';
+            hiddenContainer.appendChild(input);
+        });
+    }
+
+    function removeFoto(index) {
+        fotoFiles.splice(index, 1);
+        updateFotoTable();
+    }
+
+
 </script>
 
 @endsection
