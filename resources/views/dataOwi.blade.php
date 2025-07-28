@@ -41,7 +41,7 @@
                             <td>{{$data->rating}} ⭐</td>
                             <td>{{$data->longitude}}</td>
                             <td>{{$data->latitude}}</td>
-                            <td align="center"><a href="{{route('dataOwi',['id'=>$data->id])}}" class="btn btn-sm btn-info font-weight-bold">Detail OWI</a></td>
+                            <td align="center"><a href="{{route('wisata.detail',['id'=>$data->id])}}" class="btn btn-sm btn-info font-weight-bold">Detail OWI</a></td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row mb-1">
             <div class="col-sm-6 mb-2">
-                <h1><strong>Detail data {{$data->nama}}, {kota/kabupaten/alamat}</strong></h1>
+                <h1><strong>Detail data , {kota/kabupaten/alamat}</strong></h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -49,9 +49,6 @@
               </div>
               <!-- /.card-body -->
             </div>
-            <!-- /.card -->
-
-            <!-- About Me Box -->
             <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">About Me</h3>
@@ -373,4 +370,4 @@
         </div>
         <!-- /.row -->
       </div>
-      @endsection
+@endsection
