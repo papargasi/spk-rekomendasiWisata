@@ -14,11 +14,30 @@ class WisataSeeder extends Seeder
      */
     public function run(): void
     {
-            $wisatas = [
-        ['nama' => 'Gunung Ciremai', 'jenis' => 'alam', 'lokasi' => 'https://maps.google.com', 'deskripsi' => 'Wisata alam pendakian'],
-        ['nama' => 'Keraton Kasepuhan', 'jenis' => 'sejarah', 'lokasi' => 'https://maps.google.com', 'deskripsi' => 'Keraton bersejarah di Cirebon'],
-        ['nama' => 'Makam Sunan Gunung Jati', 'jenis' => 'religi', 'lokasi' => 'https://maps.google.com', 'deskripsi' => 'Wisata religi ziarah']
+                $wisatas = [
+        [
+            'nama' => 'Gunung Ciremai',
+            'deskripsi' => 'Wisata alam pendakian',
+            'latitude' => -6.8915,
+            'longitude' => 108.4061,
+            'rating' => 4.8
+        ],
+        [
+            'nama' => 'Keraton Kasepuhan',
+            'deskripsi' => 'Keraton bersejarah di Cirebon',
+            'latitude' => -6.7112,
+            'longitude' => 108.5740,
+            'rating' => 4.6
+        ],
+        [
+            'nama' => 'Makam Sunan Gunung Jati',
+            'deskripsi' => 'Wisata religi ziarah',
+            'latitude' => -6.6885,
+            'longitude' => 108.5661,
+            'rating' => 4.7
+        ]
     ];
+
 
     foreach ($wisatas as $w) {
         $wisata = Wisata::create($w);
