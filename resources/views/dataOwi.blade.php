@@ -13,8 +13,8 @@
                 </ol>
             </div>
             <div class="row">
-                <a href="#" class="btn btn-success mr-2"><strong>Tambah data</strong></a>
-                <a href="#" class="btn btn-info"><strong>Edit data</strong></a>
+                <a href="{{route('wisata.create')}}" class="btn btn-success btn-sm mr-2"><strong>Tambah data</strong></a>
+                <a href="#" class="btn btn-info btn-sm"><strong>Edit data</strong></a>
             </div>
         </div>
     </div>

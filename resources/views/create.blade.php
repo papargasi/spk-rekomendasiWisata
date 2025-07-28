@@ -1,54 +1,147 @@
 @extends('layout')
 
 @section('content')
-    <div class="container">
-        <h2>Tambah Lokasi Wisata</h2>
-
-        @if(session('success'))
-            <div style="color: green;">{{ session('success') }}</div>
-        @endif
-
-        <form action="{{ route('wisata.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-
-            <label>Nama Tempat</label>
-            <input type="text" name="nama" required><br><br>
-
-            <label>Deskripsi</label>
-            <textarea name="deskripsi"></textarea><br><br>
-
-            <label>Rating (0 - 5)</label>
-            <input type="number" step="0.1" name="rating" min="0" max="5" required><br><br>
-
-            <label>Gambar</label>
-            <input type="file" name="gambar" accept="image/*"><br><br>
-
-            <label>Latitude</label>
-            <input type="text" name="latitude" id="latitude" readonly required><br>
-
-            <label>Longitude</label>
-            <input type="text" name="longitude" id="longitude" readonly required><br><br>
-
-            <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px;"></div>
-
-            <button type="submit">Simpan</button>
-        </form>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-1">
+            <div class="col-sm-6 mb-2">
+                <h1><strong>Tambah data objek wisata</strong></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#" style="color:grey">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/dataOwi" style="color:grey">Tabel data OWI</a></li>
+                    <li class="breadcrumb-item active">Tambah data OWI</li>
+                </ol>
+            </div>
+        </div>
     </div>
+</section>
+<div class="container mt-5">
+    <div class="card">
+    <div id="stepper" class="bs-stepper">
+        <div class="card-head">
+            <div class="bs-stepper-header" role="tablist">
+                <div class="step" data-target="#info-step">
+                    <button type="button" class="step-trigger" role="tab">
+                        <span class="bs-stepper-circle">1</span>
+                        <span class="bs-stepper-label">Info Wisata</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="step" data-target="#foto-step">
+                    <button type="button" class="step-trigger" role="tab">
+                        <span class="bs-stepper-circle">2</span>
+                        <span class="bs-stepper-label">Upload Foto</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="step" data-target="#map-step">
+                    <button type="button" class="step-trigger" role="tab">
+                        <span class="bs-stepper-circle">3</span>
+                        <span class="bs-stepper-label">Titik Koordinat</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="bs-stepper-content">
+                <form action="{{ route('wisata.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+    
+                    <!-- Step 1 -->
+                    <div id="info-step" class="content" role="tabpanel">
+                        <div class="mb-3">
+                            <label>Nama Objek Wisata</label>
+                            <input type="text" class="form-control" name="nama" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Deskripsi</label>
+                            <textarea name="deskripsi" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Lanjut</button>
+                    </div>
+    
+                    <!-- Step 2 -->
+                    <div id="foto-step" class="content" role="tabpanel">
+                        <div class="mb-3">
+                            <label>Upload Foto Objek Wisata</label>
+                            <input type="file" class="form-control" name="foto[]" multiple accept="image/*" required>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="stepper.previous()">Sebelumnya</button>
+                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Lanjut</button>
+                    </div>
+    
+                    <!-- Step 3 -->
+                    <div id="map-step" class="content" role="tabpanel">
+                        <p>Klik pada peta untuk menentukan lokasi objek wisata:</p>
+                        <div id="map" style="height: 400px;"></div>
+                        <input type="hidden" name="latitude" id="latitude">
+                        <input type="hidden" name="longitude" id="longitude">
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-secondary" onclick="stepper.previous()">Sebelumnya</button>
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-footer"></div>
+    </div>
+    </div>
+</div>
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{{-- Leaflet JS --}}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    <script>
-        const map = L.map('map').setView([-6.75, 108.4], 9); // Fokus Ciayumajakuning
+{{-- Step Navigation Script + Map --}}
+<script>
+    let stepper;
+    document.addEventListener('DOMContentLoaded', function () {
+        stepper = new window.Stepper(document.querySelector('#stepper'));
+
+        // Inisialisasi peta hanya saat langkah ke-3 ditampilkan
+        const mapContainer = document.getElementById('map');
+        let mapInitialized = false;
+        document.querySelector('[data-target="#map-step"]').addEventListener('click', function () {
+            if (!mapInitialized) {
+                const map = L.map('map').setView([-6.75, 108.4], 9);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+
+                let marker;
+
+                map.on('click', function (e) {
+                    const lat = e.latlng.lat.toFixed(6);
+                    const lng = e.latlng.lng.toFixed(6);
+
+                    document.getElementById('latitude').value = lat;
+                    document.getElementById('longitude').value = lng;
+
+                    if (marker) {
+                        marker.setLatLng(e.latlng);
+                    } else {
+                        marker = L.marker(e.latlng).addTo(map);
+                    }
+                });
+
+                mapInitialized = true;
+            }
+        });
+    });
+
+     let map, marker;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        map = L.map('map').setView([-6.75, 108.4], 9);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        let marker;
-
-        map.on('click', function(e) {
+        map.on('click', function (e) {
             const lat = e.latlng.lat.toFixed(6);
             const lng = e.latlng.lng.toFixed(6);
 
@@ -61,5 +154,17 @@
                 marker = L.marker(e.latlng).addTo(map);
             }
         });
-    </script>
+
+        // Jika pengguna langsung ke step 3, pastikan map di-render ulang
+        const observer = new MutationObserver(() => {
+            if (document.getElementById('step-3').classList.contains('active')) {
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 100);
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    });
+</script>
+
 @endsection
