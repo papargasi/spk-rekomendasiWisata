@@ -14,7 +14,7 @@ class WisataSeeder extends Seeder
      */
     public function run(): void
     {
-                $wisatas = [
+            $wisatas = [
         [
             'nama' => 'Gunung Ciremai',
             'deskripsi' => 'Wisata alam pendakian',

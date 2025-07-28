@@ -1,7 +1,7 @@
 @extends('layout')
 
     @section('content')
-        <h2>Peta Wisata Ciayumajakuning (Gratis Tanpa Google)</h2>
+        <h2>Peta lokasi tempat wisata <strong>CIAYUMAJAKUNING</strong></h2>
         <p>Wilayah: Cirebon, Indramayu, Majalengka, Kuningan, Subang</p>
 
         <div id="map" style="height: 500px; width: 100%; margin-top: 10px;"></div>
@@ -9,7 +9,7 @@
 
         <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
+        
         <script>
     const map = L.map('map').setView([-6.75, 108.4], 9);
 
@@ -25,7 +25,7 @@ if (navigator.geolocation) {
         const lng = position.coords.longitude;
         origin = L.latLng(lat, lng);
 
-        L.marker(origin).addTo(map).bindPopup("Lokasi Anda Sekarang").openPopup();
+        L.marker(origin).addTo(map).bindPopup("<strong>Ini lokasi mu yak😁</strong>").openPopup();
         map.setView(origin, 12); // Zoom ke lokasi pengguna
 
         // Setelah origin ditentukan, jalankan fungsi tampilkan marker wisata
@@ -46,7 +46,7 @@ if (navigator.geolocation) {
 
 // Fungsi menampilkan wisata setelah dapat lokasi user
 function tampilkanWisata(origin) {
-    const wisataList = @json($wisataData);
+    const wisataList = @JSON($wisataData);
 
     wisataList.forEach((wisata) => {
         const dest = L.latLng(wisata.latitude, wisata.longitude);

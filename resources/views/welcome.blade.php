@@ -1,9 +1,9 @@
 <!-- isi halaman index -->
 
-@extends('layout')
+@extends('welcome')
 
-<!-- Content Wrapper. Contains page content --> -->
 @section('content')
+      <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
