@@ -16,6 +16,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+            .equal-height {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .scrollable-tab-body {
+          flex-grow: 1;
+          overflow-y: auto;
+          max-height: 650px;
+        }
+          .clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;    /* Batasi 2 baris */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
         .custom-modal {
         display: none;
         position: fixed;

@@ -27,17 +27,6 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-12 col-sm-6 col-md-4 h-100">
-                    <a href="#" class="text-decoration-none" style="color:black">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-info elevation-1" id="edit-icon"><i class="fas fa-edit"></i></span>
-                            <div class="info-box-content equal-box">
-                                <span class="info-box-number" id="edit-text">Edit data</span>
-                                <span class="info-box-text" id="edit-text-kecil">Ketuk untuk mengedit</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
             </div>
         </div>
         <div class="row">

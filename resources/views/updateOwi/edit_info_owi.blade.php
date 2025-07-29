@@ -20,7 +20,7 @@
             </div>
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-4 h-100">
-                    <a href="{{ route('wisata.create') }}"  class="text-decoration-none" style="color:black">
+                    <a href="{{route('wisata.detail',['id'=>$data->id])}}"  class="text-decoration-none" style="color:black">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-danger elevation-1" id="times-icon"><i class="fas fa-times"></i></span>
                             <div class="info-box-content equal-box">
