@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#"  class="text-decoration-none" style="color:grey">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/"  class="text-decoration-none" style="color:grey">Home</a></li>
                         <li class="breadcrumb-item active">Tabel data OWI</li>
                     </ol>
                 </div>
