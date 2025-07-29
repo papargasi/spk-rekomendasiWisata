@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-sm-9">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#"  class="text-decoration-none" style="color:grey">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/"  class="text-decoration-none" style="color:grey">Home</a></li>
                         <li class="breadcrumb-item active"><a href="/dataOwi"  class="text-decoration-none" style="color:grey">Tabel data OWI</a></li>
                         <li class="breadcrumb-item  active"><a href="{{route('wisata.detail',['id'=>$data->id])}}"  class="text-decoration-none" style="color:grey">Detail data {{$data->nama}}</a></li>
                         <li class="breadcrumb-item  active">Edit informasi {{$data->nama}}</li>
