@@ -7,7 +7,7 @@ use App\Http\Controllers\OwiController;
 use App\Http\Controllers\petaController;
 use App\Http\Controllers\kategoriController;
 use App\Http\Controllers\penilaianController;
-use App\Models\Penilaian;
+use App\Http\Controllers\customerController;
 
 Route::get('/', [dashboardController::class, 'index']);
 Route::get('/rekomendasi', [RekomendasiController::class, 'index']);
@@ -22,3 +22,6 @@ Route::get('/edit/detailOwi/{id}', [OwiController::class, 'detailInfoOwi'])->nam
 Route::get('/konfigurasi-peta', [petaController::class, 'index'])->name('peta');
 Route::get('/kategori', [kategoriController::class, 'index'])->name('kategori');
 Route::get('/penilaian', [penilaianController::class, 'index'])->name('penilaian');
+
+//route halaman customer
+Route::get('/customer', [customerController::class, 'index'])->name('customer');
