@@ -1,17 +1,17 @@
 @extends('layout')
-@section('tittle', '| Data Objek Wisata')
+@section('tittle','Kategori OWI')
 @section('content')
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-1">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Tabel data objek wisata</h1>
+                    <h1 class="m-0">Tabel data bobot kriteria</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/"  class="text-decoration-none" style="color:grey">Home</a></li>
-                        <li class="breadcrumb-item active">Tabel data OWI</li>
+                        <li class="breadcrumb-item active">Tabel bobot kriteria</li>
                     </ol>
                 </div>
             </div>
@@ -38,20 +38,16 @@
                                 <table class="table table-noborder">
                                     <thead>
                                         <tr>
-                                            <th>Nama OWI</th>
-                                            <th>Rating OWI</th>
-                                            <th>Longitude</th>
-                                            <th>Latitude</th>
+                                            <th>Kriteria</th>
+                                            <th>Bobot</th>
                                             <th>Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($data as $data)
                                         <tr>
-                                            <td>{{$data->nama}}</td>
-                                            <td>{{$data->rating}} ⭐</td>
-                                            <td>{{$data->longitude}}</td>
-                                            <td>{{$data->latitude}}</td>
+                                            <td>{{$data->kriteria}}</td>
+                                            <td>{{$data->bobot}} ⭐</td>
                                             <td align="center">
                                                 <a href="{{route('wisata.detail',['id'=>$data->id])}}" class="btn btn-sm btn-info font-weight-bold">Detail OWI</a>
                                             </td>
@@ -67,7 +63,5 @@
             <div class="card-footer"></div>
         </div>
     </div>
-</div>
-</div>
 </section>
 @endsection

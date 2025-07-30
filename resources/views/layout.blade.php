@@ -145,7 +145,7 @@
   </nav>
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="/" class="brand-link">
       <img src="{{ asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-bold">ROWO.ID</span>
     </a>
@@ -174,7 +174,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="{{route('peta')}}" class="nav-link">
               <i class="nav-icon fas fa-map"></i>
               <p>
                 Konfigurasi peta OWI
@@ -182,7 +182,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="{{route('kategori')}}" class="nav-link">
               <i class="nav-icon fas fa-image"></i>
               <p>
                 Kategori OWI
@@ -190,7 +190,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="{{route('penilaian')}}" class="nav-link">
               <i class="nav-icon fas fa-star"></i>
               <p>
                 Penilaian OWI
@@ -231,10 +231,12 @@
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE -->
 <script src="{{ asset('dist/js/adminlte.js')}}"></script>
+<!-- jQuery -->
 
 <!-- OPTIONAL SCRIPTS -->
 <!-- AdminLTE for demo purposes -->

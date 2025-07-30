@@ -28,7 +28,7 @@
               <div class="info-box-content">
                 <span class="info-box-text">Total OWI</span>
                 <span class="info-box-number">
-                  100 places
+                  {{$totalOwi}} Places
                 </span>
               </div>
             </div>
@@ -39,7 +39,7 @@
               <div class="info-box-content">
                 <span class="info-box-text">Rata rata penilaian</span>
                 <span class="info-box-number">
-                  4.5<sup>⭐</sup>
+                  {{$avgPenilaian}}<sup>⭐</sup>
                 </span>
               </div>
             </div>
@@ -50,7 +50,7 @@
               <div class="info-box-content">
                 <span class="info-box-text">Galeri OWI</span>
                 <span class="info-box-number">
-                  10
+                  {{$totalGaleri}} images
                 </span>
               </div>
             </div>
