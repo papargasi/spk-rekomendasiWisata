@@ -17,4 +17,9 @@ protected $fillable = ['id','nama', 'deskripsi', 'latitude', 'longitude', 'ratin
     {
         return $this->hasMany(Foto::class, 'id_owi', 'id');
     }
+    public function fotoPertama()
+    {
+        return $this->hasOne(Foto::class, 'id_owi','id')->oldest();
+    }
+
 }
