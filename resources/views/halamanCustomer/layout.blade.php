@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>ROWO.ID</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
+  <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Cardo:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: PhotoFolio
+  * Template URL: https://bootstrapmade.com/photofolio-bootstrap-photography-website-template/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+      html {
+          scroll-behavior: smooth;
+        }
+        .details-link {
+            white-space: normal; /* biar teks bisa pindah baris */
+            word-break: break-word; /* biar kata panjang bisa dipotong */
+            text-align: center; /* biar rapi di tengah */
+            display: inline-block; /* biar properti text-align bisa bekerja */
+            max-width: 100%; /* biar tidak melewati container */
+        }
+        .slide-image-wrapper {
+          width: 250px;
+          aspect-ratio: 1/1; /* Membuat gambar kotak (1:1) */
+          overflow: hidden;
+          border-radius: 16px; /* Sudut membulat */
+          margin: auto; /* Tengah jika slide lebih besar */
+        }
+
+        .slide-image-wrapper img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 16px;
+          display: block;
+        }
+
+        /* Opsional: agar slider tidak terlalu besar */
+        .swiper-slide {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+  </style>
+
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+
+      <a href="/customer" id="scroll-top" class="logo d-flex align-items-center me-auto me-xl-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <i class="bi bi-camera"></i>
+        <h1 class="sitename">ROWO.ID</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+
+
+          <li><a href="/customer" >Home<br></a></li>
+
+          <li class="dropdown">
+            <a href="#"><span>Gallery</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul id="menuList" style="padding: 2px">
+              <li>
+                <!-- Search Field -->
+                <input type="text" id="searchBar" placeholder="Cari objek wisata..." oninput="filterMenu()" style="width: 100%; padding: 6px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc;">
+              </li>
+              <div id="scrollableList" style="max-height: 200px; overflow-y: auto;">
+              @foreach($topBar as $data)
+                <li class="menu-item"><a href="{{ route('detail',['id'=>$data->id]) }}">{{ $data->nama }}</a></li>
+              @endforeach
+              </div>
+              <li id="notFoundMessage" style="text-align:center;display: none; color: red; padding: 10px;">Objek wisata tidak tersedia</li>
+
+            </ul>
+          </li>
+
+            <!-- Pesan jika tidak ditemukan -->
+
+          <li><a href="about.html">Rekomendasi saya</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    @yield('content')
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="copyright text-center ">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">ROWO.ID</strong> <span>All Rights Reserved</span></p>
+      </div>
+      <div class="social-links d-flex justify-content-center">
+        <a href=""><i class="bi bi-twitter-x"></i></a>
+        <a href=""><i class="bi bi-facebook"></i></a>
+        <a href=""><i class="bi bi-instagram"></i></a>
+        <a href=""><i class="bi bi-linkedin"></i></a>
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">Kelompok 1</a> Distributed by <a href="https://themewagon.com">ROWO.ID</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="line"></div>
+  </div>
+
+  <!-- Vendor JS Files -->
+  <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
+  <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
+  <script src="{{ asset('assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+
+  <!-- Main JS File -->
+  <script src="{{ asset('assets/js/main.js') }}"></script>
+  <script>
+  function filterMenu() {
+    const input = document.getElementById("searchBar").value.toLowerCase();
+    const items = document.querySelectorAll("#menuList .menu-item");
+    const notFound = document.getElementById("notFoundMessage");
+
+    let hasMatch = false;
+
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const match = text.includes(input);
+
+      item.style.display = match ? "block" : "none";
+
+      if (match) {
+        hasMatch = true;
+      }
+    });
+
+    notFound.style.display = input.length > 0 && !hasMatch ? "block" : "none";
+  }
+</script>
+
+
+</body>
+
+</html>

@@ -25,3 +25,4 @@ Route::get('/penilaian', [penilaianController::class, 'index'])->name('penilaian
 
 //route halaman customer
 Route::get('/customer', [customerController::class, 'index'])->name('customer');
+Route::get('/customer-detail/{id}', [customerController::class, 'detail'])->name('detail');
