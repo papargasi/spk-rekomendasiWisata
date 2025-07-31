@@ -10,11 +10,12 @@ class customerController extends Controller
 {
     public function index(){
         $data = Wisata::with('fotoPertama')->get();
-
-        return view('halamanCustomer.index',compact('data'));
+        $topBar = Wisata::all();
+        return view('halamanCustomer.index',compact('data','topBar'));
     }
     public function detail($id){
         $data = Wisata::with('foto')->findOrFail($id);
-        return view('halamanCustomer.detailSingle',compact('data'));
+        $topBar = Wisata::all();
+        return view('halamanCustomer.detailSingle',compact('data','topBar'));
     }
 }

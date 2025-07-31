@@ -45,6 +45,28 @@
             display: inline-block; /* biar properti text-align bisa bekerja */
             max-width: 100%; /* biar tidak melewati container */
         }
+        .slide-image-wrapper {
+          width: 250px;
+          aspect-ratio: 1/1; /* Membuat gambar kotak (1:1) */
+          overflow: hidden;
+          border-radius: 16px; /* Sudut membulat */
+          margin: auto; /* Tengah jika slide lebih besar */
+        }
+
+        .slide-image-wrapper img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 16px;
+          display: block;
+        }
+
+        /* Opsional: agar slider tidak terlalu besar */
+        .swiper-slide {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
 
   </style>
 
@@ -55,7 +77,7 @@
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-      <a href="#" id="scroll-top" class="logo d-flex align-items-center me-auto me-xl-0">
+      <a href="/customer" id="scroll-top" class="logo d-flex align-items-center me-auto me-xl-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
         <i class="bi bi-camera"></i>
@@ -64,30 +86,33 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html" class="active">Home<br></a></li>
-          <li class="dropdown"><a href="gallery.html"><span>Gallery</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-                <li><a href="gallery.html">Nature</a></li>
-                <li><a href="gallery.html">People</a></li>
-                <li><a href="gallery.html">Architecture</a></li>
-                <li><a href="gallery.html">Animals</a></li>
-                <li><a href="gallery.html">Sports</a></li>
-                <li><a href="gallery.html">Travel</a></li>
-                <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                    <ul>
-                        <li><a href="#">Deep Dropdown 1</a></li>
-                        <li><a href="#">Deep Dropdown 2</a></li>
-                        <li><a href="#">Deep Dropdown 3</a></li>
-                        <li><a href="#">Deep Dropdown 4</a></li>
-                        <li><a href="#">Deep Dropdown 5</a></li>
-                    </ul>
-                </li>
+
+
+          <li><a href="/customer" >Home<br></a></li>
+
+          <li class="dropdown">
+            <a href="#"><span>Gallery</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul id="menuList" style="padding: 2px">
+              <li>
+                <!-- Search Field -->
+                <input type="text" id="searchBar" placeholder="Cari objek wisata..." oninput="filterMenu()" style="width: 100%; padding: 6px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc;">
+              </li>
+              <div id="scrollableList" style="max-height: 200px; overflow-y: auto;">
+              @foreach($topBar as $data)
+                <li class="menu-item"><a href="{{ route('detail',['id'=>$data->id]) }}">{{ $data->nama }}</a></li>
+              @endforeach
+              </div>
+              <li id="notFoundMessage" style="text-align:center;display: none; color: red; padding: 10px;">Objek wisata tidak tersedia</li>
+
             </ul>
-        </li>
-        <li><a href="about.html">About</a></li>
-          <li><a href="services.html">Services</a></li>
+          </li>
+
+            <!-- Pesan jika tidak ditemukan -->
+
+          <li><a href="about.html">Rekomendasi saya</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
+
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
@@ -141,6 +166,29 @@
 
   <!-- Main JS File -->
   <script src="{{ asset('assets/js/main.js') }}"></script>
+  <script>
+  function filterMenu() {
+    const input = document.getElementById("searchBar").value.toLowerCase();
+    const items = document.querySelectorAll("#menuList .menu-item");
+    const notFound = document.getElementById("notFoundMessage");
+
+    let hasMatch = false;
+
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const match = text.includes(input);
+
+      item.style.display = match ? "block" : "none";
+
+      if (match) {
+        hasMatch = true;
+      }
+    });
+
+    notFound.style.display = input.length > 0 && !hasMatch ? "block" : "none";
+  }
+</script>
+
 
 </body>
 
