@@ -56,6 +56,10 @@
                             <input type="text" class="form-control" name="nama" required>
                         </div>
                         <div class="mb-3">
+                            <label>Jenis Wisata</label>
+                            <input type="text" class="form-control" name="jenis" required>
+                        </div>
+                        <div class="mb-3">
                             <label>Deskripsi</label>
                             <textarea name="deskripsi" class="form-control" rows="4" required></textarea>
                         </div>
@@ -66,7 +70,7 @@
                     <div id="foto-step" class="content" role="tabpanel">
                         <div class="mb-3">
                             <label>Upload Foto Objek Wisata</label>
-                            <input type="file" class="form-control" id="fotoInput" accept="image/*">
+                            <input type="file" name="foto[]" multiple class="form-control" id="fotoInput" accept="image/*">
                             <small class="text-muted">Pilih satu per satu. Semua gambar akan ditampilkan di bawah.</small>
                         </div>
 
@@ -140,15 +144,23 @@
         stepper = new window.Stepper(document.querySelector('#stepper'));
 
         // Deteksi saat tombol ke step peta diklik
-        document.querySelector('[data-target="#map-step"]').addEventListener('click', function () {
-            setTimeout(() => {
-                if (!mapInitialized) {
-                    initMap(); // Inisialisasi peta pertama kali
-                } else {
-                    map.invalidateSize(); // Refresh ukuran peta jika sudah ada
-                }
-            }, 300); // Delay untuk memastikan layout sudah ditampilkan
-        });
+// Gunakan event 'shown.bs-stepper' untuk mendeteksi saat step 3 benar-benar aktif
+document.querySelector('#stepper').addEventListener('shown.bs-stepper', function (event) {
+    const targetStep = event.detail.indexStep; // index 0 = info, 1 = foto, 2 = map
+
+    if (targetStep === 2) {
+        setTimeout(() => {
+            if (!mapInitialized) {
+                initMap();
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 300);
+            } else {
+                map.invalidateSize();
+            }
+        }, 300); // beri delay setelah DOM tampil
+    }
+});
     });
 
     function initMap() {

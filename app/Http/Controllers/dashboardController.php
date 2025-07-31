@@ -14,6 +14,9 @@ class dashboardController extends Controller
         $totalOwi = $data->count();
         $totalGaleri = foto::all()->count();
         $avgPenilaian = (float) Penilaian::avg('rating');
-        return view('welcome', compact('data','totalOwi','totalGaleri','avgPenilaian'));
+        $wisataData = Wisata::with('fotoUtama')->get(); // ambil semua wisata dari database
+
+        return view('welcome',compact('data','totalOwi','totalGaleri','avgPenilaian','wisataData'));
+
     }
 }

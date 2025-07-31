@@ -8,7 +8,7 @@ class Foto extends Model
 {
     protected $table = 'tbl_gambar'; // nama tabel di database
 
-    protected $fillable = ['id_gambar', 'id_owi','nm_foto'];
+    protected $fillable = ['id_owi','nm_foto'];
 
     // Foreign key ke tabel wisata
     public function wisata()

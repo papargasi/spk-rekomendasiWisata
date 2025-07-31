@@ -39,7 +39,25 @@ class OwiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+            $request->validate([
+        'nama' => 'required',
+        'jenis' => 'required',
+        'deskripsi' => 'nullable',
+        'latitude' => 'required|numeric',
+        'longitude' => 'required|numeric',
+        'rating' => 'required|numeric|min:0|max:5',
+        'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
+
+    $data = $request->except('gambar');
+
+    if ($request->hasFile('gambar')) {
+        $data['gambar'] = $request->file('gambar')->store('wisata', 'public');
+    }
+
+    Wisata::create($data);
+
+    return redirect('rekomendasi')->with('success', 'Data wisata berhasil ditambahkan!');
     }
 
     /**

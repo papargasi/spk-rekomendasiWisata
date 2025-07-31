@@ -24,22 +24,35 @@ return view('rekomendasi', compact( 'wisataData'));
 {
     $request->validate([
         'nama' => 'required',
+        'jenis' => 'required',
         'deskripsi' => 'nullable',
         'latitude' => 'required|numeric',
         'longitude' => 'required|numeric',
-        'rating' => 'required|numeric|min:0|max:5',
-        'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        'foto.*' => 'image|mimes:jpg,jpeg,png|max:2048'
     ]);
 
-    $data = $request->except('gambar');
+    // Simpan data utama wisata
+    $wisata = Wisata::create([
+        'nama' => $request->nama,
+        'jenis' => $request->jenis,
+        'deskripsi' => $request->deskripsi,
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        'rating' => 0 // default atau boleh dihilangkan kalau tidak dipakai sekarang
+    ]);
 
-    if ($request->hasFile('gambar')) {
-        $data['gambar'] = $request->file('gambar')->store('wisata', 'public');
+    // Simpan setiap foto ke storage dan database
+    if ($request->hasFile('foto')) {
+        foreach ($request->file('foto') as $file) {
+            $path = $file->store('wisata_foto', 'public');
+
+            Foto::create([
+                'id_owi' => $wisata->id,
+                'nm_foto' => $path
+            ]);
+        }
     }
 
-    Wisata::create($data);
-
-    return redirect('rekomendasi')->with('success', 'Data wisata berhasil ditambahkan!');
+    return redirect('rekomendasi')->with('success', 'Data wisata dan foto berhasil ditambahkan!');
 }
 }
-

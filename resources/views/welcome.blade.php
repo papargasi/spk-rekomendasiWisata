@@ -66,8 +66,66 @@
               </div>
               <div class="card-body">
                 <div class="position-relative mb-4">
-                  Naro map disini a bud
-                  <canvas id="visitors-chart" height="200"></canvas>
+                  <div id="map" style="height: 300px; width: 100%; margin-top: 10px;"></div>
+                  <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                      const map = L.map('map').setView([-6.75, 108.4], 9);
+                      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                      }).addTo(map);
+                        
+                      let origin;
+                      if (navigator.geolocation) {
+                          navigator.geolocation.getCurrentPosition(function (position) {
+                              const lat = position.coords.latitude;
+                              const lng = position.coords.longitude;
+                              origin = L.latLng(lat, lng);
+                              // L.marker(origin).addTo(map).bindPopup("<strong>Ini lokasi mu yak😁</strong>").openPopup(); ← hapus ini
+                              map.setView(origin, 12);
+                              tampilkanWisata(origin);
+                          }, function (error) {
+                              alert("Gagal mendapatkan lokasi: " + error.message);
+                              setDefaultOrigin();
+                          });
+                      } else {
+                          alert("Browser tidak mendukung geolokasi.");
+                          setDefaultOrigin();
+                      }
+                      function setDefaultOrigin() {
+                          origin = L.latLng(-6.732023, 108.552315);
+                          // L.marker(origin).addTo(map).bindPopup("Lokasi Default (Cirebon)").openPopup(); ← hapus ini juga
+                          map.setView(origin, 11);
+                          tampilkanWisata(origin);
+                      }
+                      
+                      function tampilkanWisata(origin) {
+                        const wisataList = @json($wisataData ?? []);
+                        console.log(wisataList);
+                        wisataList.forEach((wisata) => {
+                          const dest = L.latLng(wisata.latitude, wisata.longitude);
+                          const gambar = wisata.foto_utama ? wisata.foto_utama.nm_foto : null;
+                          const marker = L.marker(dest).addTo(map).bindPopup();
+                          fetch(`https://router.project-osrm.org/route/v1/driving/${origin.lng},${origin.lat};${dest.lng},${dest.lat}?overview=false`)
+                          .then(res => res.json())
+                          .then(route => {
+                            if (route.routes && route.routes.length > 0) {
+                              const distance = route.routes[0].distance / 1000;
+                              const duration = route.routes[0].duration / 60;
+                              
+                              const popupContent = `
+                              <b>${wisata.nama}</b><br>
+                              Rating: ${wisata.rating} ⭐<br>
+                              <img src="{{asset('storage/wisata/${gambar}')}}" alt="${gambar}" width="150px" style="margin-bottom:5px;border-radius:15px"><br>
+                              <strong style="">Jarak:</strong> ${distance.toFixed(1)} km<br>
+                              <strong>Waktu tempuh:</strong> ${duration.toFixed(1)} menit
+                              `;
+                              marker.bindPopup(popupContent);
+                            }
+                          });
+                        });
+                      }
+                    });
+                  </script>
                 </div>
               </div>
             </div>
@@ -85,7 +143,7 @@
                                 <div class="d-flex flex-wrap overflow-auto" style="max-height: 340px; gap: 10px;">
                                     @foreach ($wisata->foto as $f)
                                         <div style="flex: 0 0 48%;">
-                                            <img src="{{ asset('storage/wisata/' . $f->nm_foto) }}" alt="foto"
+                                            <img src="{{ asset('storage/wisata/' . $f->nm_foto) }}" alt="{{$f->nm_foto}}"
                                                 class="img-fluid rounded shadow-sm mb-2"
                                                 style="height: 150px; width: 100%;; object-fit: cover;">
                                         </div>
