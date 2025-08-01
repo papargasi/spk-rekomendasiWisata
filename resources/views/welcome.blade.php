@@ -115,7 +115,7 @@
                               const popupContent = `
                               <b>${wisata.nama}</b><br>
                               Rating: ${wisata.rating} ⭐<br>
-                              <img src="{{asset('storage/wisata/${gambar}')}}" alt="${gambar}" width="150px" style="margin-bottom:5px;border-radius:15px"><br>
+                              <img src="{{asset('storage/${gambar}')}}" alt="${gambar}" width="150px" style="margin-bottom:5px;border-radius:15px"><br>
                               <strong style="">Jarak:</strong> ${distance.toFixed(1)} km<br>
                               <strong>Waktu tempuh:</strong> ${duration.toFixed(1)} menit
                               `;
@@ -143,7 +143,7 @@
                                 <div class="d-flex flex-wrap overflow-auto" style="max-height: 340px; gap: 10px;">
                                     @foreach ($wisata->foto as $f)
                                         <div style="flex: 0 0 48%;">
-                                            <img src="{{ asset('storage/wisata/' . $f->nm_foto) }}" alt="{{$f->nm_foto}}"
+                                            <img src="{{ asset('storage/' . $f->nm_foto) }}" alt="{{$f->nm_foto}}"
                                                 class="img-fluid rounded shadow-sm mb-2"
                                                 style="height: 150px; width: 100%;; object-fit: cover;">
                                         </div>

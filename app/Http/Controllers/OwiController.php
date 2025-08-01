@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Wisata;
 use App\Models\foto;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
 class OwiController extends Controller
@@ -28,6 +29,16 @@ class OwiController extends Controller
     {
         $data = Wisata::findOrFail($id);
         return view('updateOwi.edit_info_owi', compact('data'));
+    }
+    public function detailRatingOwi($id)
+    {
+        $data = Wisata::findOrFail($id);
+        return view('updateOwi.edit_rating_owi', compact('data'));
+    }
+    public function detailFotoOwi($id)
+    {
+        $data = Wisata::with('foto')->findOrFail($id);
+        return view('updateOwi.edit_foto_owi', compact('data'));
     }
     public function create()
     {
@@ -87,8 +98,25 @@ class OwiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+public function destroy(string $id)
+{
+    // Ambil semua foto yang berkaitan
+    $fotos = Foto::where('id_owi', $id)->get();
+
+    foreach ($fotos as $foto) {
+        $path = public_path('storage/' . $foto->nm_foto); // Contoh: public/storage/wisata/foto.jpg
+
+        if (File::exists($path)) {
+            unlink($path); // atau File::delete($path);
+        }
     }
+
+    // Hapus entri foto dari database
+    Foto::where('id_owi', $id)->delete();
+
+    // Hapus entri wisata
+    Wisata::destroy($id);
+
+    return redirect()->route('wisata.index')->with('success', 'Data berhasil dihapus');
+}
 }

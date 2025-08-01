@@ -63,6 +63,10 @@
                             <label>Deskripsi</label>
                             <textarea name="deskripsi" class="form-control" rows="4" required></textarea>
                         </div>
+                        <div class="mb-3">
+                            <label>Rating</label>
+                            <input type="number" class="form-control" name="rating" required>
+                        </div>
                         <button type="button" class="btn btn-primary" onclick="stepper.next()">Lanjut</button>
                     </div>
     

@@ -37,20 +37,12 @@
                 <div class="card">
                     <div class="card-header"></div>
                     <div class="card-body">
-                        <form action="{{ route('wisata.updateInfo', ['id' => $data->id]) }}" method="POST">
+                        <form action="{{ route('wisata.updateRating', ['id' => $data->id]) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
-                                <label>Nama Objek Wisata</label>
-                                <input type="text" class="form-control" name="nama" value="{{ $data->nama }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Jenis Wisata</label>
-                                <input type="text" class="form-control" name="jenis" value="{{ $data->jenis }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Deskripsi</label>
-                                <textarea name="deskripsi" class="form-control" rows="4" required>{{ $data->deskripsi }}</textarea>
+                                <label>Rating Objek Wisata</label>
+                                <input type="number" class="form-control" name="rating" max=5 value="{{ $data->rating }}" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </form>

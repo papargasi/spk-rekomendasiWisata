@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class customerController extends Controller
 {
     public function index(){
-        $data = Wisata::with('fotoPertama')->get();
+        $data = Wisata::with('fotoUtama')->get();
         $topBar = Wisata::all();
         return view('halamanCustomer.index',compact('data','topBar'));
     }

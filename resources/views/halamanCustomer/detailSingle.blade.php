@@ -52,7 +52,7 @@
             @foreach ($data->foto as $item)
               <div class="swiper-slide">
                 <div class="slide-image-wrapper">
-                  <img src="{{ asset('storage/wisata/'.$item->nm_foto) }}" alt="">
+                  <img src="{{ asset('storage/'.$item->nm_foto) }}" alt="">
                 </div>
               </div>
             @endforeach

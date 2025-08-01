@@ -28,7 +28,7 @@
         @if($fotoPertama)
             <div class="col-xl-3 col-lg-4 col-md-6">
                 <div class="gallery-item h-100">
-                    <img src="{{ asset('storage/wisata/'.$fotoPertama->nm_foto) }}" 
+                    <img src="{{ asset('storage/'.$fotoPertama->nm_foto) }}" 
                         class="img-fluid" 
                         alt="{{ $fotoPertama->nm_foto }}" 
                         style="height: 250px; width: 100%; object-fit: cover;">

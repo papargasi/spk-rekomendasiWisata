@@ -27,7 +27,7 @@
           <div class="text-center">
           @if($data->foto->isNotEmpty())
               <img class="profile-user-img img-fluid img-circle"
-                  src="{{ asset('storage/wisata/'.$data->foto[0]->nm_foto) }}"
+                  src="{{ asset('storage/'.$data->foto[0]->nm_foto) }}"
                   alt="User profile picture"
                   style="width: 128px; height: 128px; object-fit: cover;">
           @endif
@@ -52,10 +52,10 @@
           <p class="text-muted clamp-2">{{ $data->deskripsi }}</p>
   
           <hr>
-  
+          
           <strong><i class="fas fa-map-marker-alt mr-1"></i> Lokasi</strong>
-  
-          <p class="text-muted">Malibu, California</p>
+          <p id="lokasi-text" class="text-muted">Sedang memuat lokasi...</p>
+
   
           <hr>
   
@@ -66,6 +66,13 @@
           <hr>
         </div>
         <!-- /.card-body -->
+        <div class="card-footer">
+            <form action="{{ route('owi.delete', ['id' => $data->id]) }}" method="POST" onsubmit="return confirm('Apakah anda yakin ingin menghapus data dari Objek wisata {{$data->nama}}?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-block">Hapus data OWI</button>
+            </form>
+        </div>
       </div>
       <!-- /.card -->
     </div>
@@ -98,7 +105,7 @@
                   <div class="row">
                       @foreach($data->foto as $foto)
                           <div class="col-md-3 mb-3">
-                              <img src="{{ asset('storage/wisata/'.$foto->nm_foto) }}"
+                              <img src="{{ asset('storage/'.$foto->nm_foto) }}"
                                   class="img-fluid rounded shadow-sm"
                                   style="height: 150px; width: 100%; object-fit: cover;">
                           </div>
@@ -109,8 +116,72 @@
               @endif
             </div>
             <div class="tab-pane fade" id="peta" role="tabpanel">
-              <div id="map" style="height: 500px; width: 100%; margin-top: 10px;"></div>
-              <div id="info"></div>
+              <div class="position-relative mb-4">
+                <div id="map" style="height: 500px; width: 100%; margin-top: 10px;"></div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                    const map = L.map('map').setView([-6.75, 108.4], 9);
+  
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+                    let origin;
+                    
+                    
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            origin = L.latLng(lat, lng);
+                            // L.marker(origin).addTo(map).bindPopup("<strong>Ini lokasi mu yak😁</strong>").openPopup(); ← hapus ini
+                            map.setView(origin, 12);
+                            tampilkanWisata(origin);
+                        }, function (error) {
+                            alert("Gagal mendapatkan lokasi: " + error.message);
+                            setDefaultOrigin();
+                        });
+                    } else {
+                        alert("Browser tidak mendukung geolokasi.");
+                        setDefaultOrigin();
+                    }
+                    
+                    function setDefaultOrigin() {
+                        origin = L.latLng(-6.732023, 108.552315);
+                        // L.marker(origin).addTo(map).bindPopup("Lokasi Default (Cirebon)").openPopup(); ← hapus ini juga
+                        map.setView(origin, 11);
+                        tampilkanWisata(origin);
+                    }
+                    
+                    function tampilkanWisata(origin) {
+                      const wisata = @json($data); // 1 baris data
+                      console.log(wisata);
+                      const dest = L.latLng(wisata.latitude, wisata.longitude);
+                      const marker = L.marker(dest).addTo(map).bindPopup(`
+                        <b>${wisata.nama}</b><br>
+                        Rating: ${wisata.rating} ⭐<br>
+                        <img src="/storage/${wisata.gambar}" width="150" />
+                      `);
+
+                      fetch(`https://router.project-osrm.org/route/v1/driving/${origin.lng},${origin.lat};${dest.lng},${dest.lat}?overview=false`)
+                        .then(res => res.json())
+                        .then(route => {
+                          if (route.routes && route.routes.length > 0) {
+                            const distance = route.routes[0].distance / 1000;
+                            const duration = route.routes[0].duration / 60;
+                            const popupContent = `
+                              <b>${wisata.nama}</b><br>
+                              Rating: ${wisata.rating} ⭐<br>
+                              <img src="/storage/${wisata.gambar}" width="150" /><br>
+                              <strong>Jarak:</strong> ${distance.toFixed(1)} km<br>
+                              <strong>Waktu tempuh:</strong> ${duration.toFixed(1)} menit
+                            `;
+                            marker.bindPopup(popupContent);
+                          }
+                        });
+                    }
+                  });
+                  </script>
+                  </div>
               <!-- Leaflet script tetap -->
             </div>
           </div>
@@ -121,6 +192,32 @@
 </div>
                 
 <script>
+  
+  const data = {
+    latitude: {{ $data->latitude }},
+    longitude: {{ $data->longitude }}
+  };
+
+  const lat = data.latitude;
+  const lon = data.longitude;
+
+  fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data); 
+      const alamat = data.address;
+      const jalan = alamat.road || alamat.town || alamat.village || "";
+      const kota = alamat.city || alamat.town || alamat.country || "";
+      const kecamatan = alamat.suburb || alamat.city_district || alamat.village || "";
+      const lokasi = `${jalan},${kecamatan}, ${kota}`;
+      
+      document.getElementById("lokasi-text").innerText = lokasi;
+    })
+    .catch(error => {
+      document.getElementById("lokasi-text").innerText = "Lokasi tidak ditemukan";
+      console.error("Gagal mengambil lokasi:", error);
+    });
+
 
   document.addEventListener("DOMContentLoaded", function () {
     const tabLinks = document.querySelectorAll('#customTab a[data-toggle="tab"]');
@@ -164,8 +261,8 @@ function closeModal(e) {
     <div class="custom-modal-content animate-fade" onclick="event.stopPropagation()">
         <h3>Edit data objek wisata <br> <b>{{$data->nama}}</b></h3>
         <a href="{{route('wisata.detail.info',['id'=>$data->id])}}" class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Informasi</a>
-        <button class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Rating</button>
-        <button class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Foto</button>
+        <a href="{{route('wisata.detail.rating',['id'=>$data->id])}}" class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Rating</a>
+        <a href="{{route('wisata.detail.foto',['id'=>$data->id])}}" class="btn btn-success w-100 mb-2 py-3 rounded-pill font-weight-bold">Foto</a>
     </div>
 </div>
 
