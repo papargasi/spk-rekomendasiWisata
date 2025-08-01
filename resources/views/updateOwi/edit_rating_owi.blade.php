@@ -44,6 +44,10 @@
                                 <label>Rating Objek Wisata</label>
                                 <input type="number" class="form-control" name="rating" max=5 value="{{ $data->rating }}" required>
                             </div>
+                            <div class="mb-3">
+                                <label>Kebersihan Objek Wisata</label>
+                                <input type="number" class="form-control" name="kebersihan" max=5 value="{{ $data->kebersihan }}" required>
+                            </div>
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </form>
                     </div>

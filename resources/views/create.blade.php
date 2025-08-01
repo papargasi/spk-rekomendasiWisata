@@ -67,6 +67,10 @@
                             <label>Rating</label>
                             <input type="number" class="form-control" name="rating" required>
                         </div>
+                        <div class="mb-3">
+                            <label>Kebersihan</label>
+                            <input type="number" class="form-control" name="kebersihan" required>
+                        </div>
                         <button type="button" class="btn btn-primary" onclick="stepper.next()">Lanjut</button>
                     </div>
     

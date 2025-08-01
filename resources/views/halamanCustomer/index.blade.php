@@ -55,5 +55,6 @@
                 behavior: "smooth"
             });
         });
+        
     </script>
 @endsection

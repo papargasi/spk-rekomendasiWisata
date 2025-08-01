@@ -41,22 +41,54 @@ function tampilkanWisata(origin) {
         Rating: ${wisata.rating} ⭐<br>
         <img src="/storage/${wisata.gambar}" width="150" />
         `);
-        fetch(`https://router.project-osrm.org/route/v1/driving/${origin.lng},${origin.lat};${dest.lng},${dest.lat}?overview=false`)
-        .then(res => res.json())
-        .then(route => {
-            if (route.routes && route.routes.length > 0) {
-                const distance = route.routes[0].distance / 1000;
-                const duration = route.routes[0].duration / 60;
-                const popupContent = `
+fetch(`https://router.project-osrm.org/route/v1/driving/${origin.lng},${origin.lat};${dest.lng},${dest.lat}?overview=false`)
+    .then(res => res.json())
+    .then(route => {
+        if (route.routes && route.routes.length > 0) {
+            const distance = route.routes[0].distance / 1000; // km
+            const duration = route.routes[0].duration / 60;   // menit
+            const rating = wisata.rating;
+            const kebersihan = wisata.kebersihan;
+
+            // ======= Normalisasi SMART =======
+
+            const minDistance = 1;
+            const maxDistance = 50;
+            const minRating = 1;
+            const maxRating = 5;
+            const minKebersihan = 1;
+            const maxKebersihan = 5;
+
+            const normRating = (rating - minRating) / (maxRating - minRating);
+            const normKebersihan = (kebersihan - minKebersihan) / (maxKebersihan - minKebersihan);
+            const normDistance = (maxDistance - distance) / (maxDistance - minDistance); // cost
+
+            // Bobot
+            const wRating = 0.4;
+            const wDistance = 0.3;
+            const wKebersihan = 0.3;
+
+            // Perhitungan SMART Score
+            const smartScore = (
+                normRating * wRating +
+                normDistance * wDistance +
+                normKebersihan * wKebersihan
+            ).toFixed(3);
+
+            // ======= Tampilkan ke user =======
+            const popupContent = `
                 <b>${wisata.nama}</b><br>
-                Rating: ${wisata.rating} ⭐<br>
+                Rating: ${rating} ⭐<br>
+                Kebersihan: ${kebersihan} / 5<br>
                 <img src="/storage/${wisata.gambar}" width="150" /><br>
                 <strong>Jarak:</strong> ${distance.toFixed(1)} km<br>
-                <strong>Waktu tempuh:</strong> ${duration.toFixed(1)} menit
-                `;
-                marker.bindPopup(popupContent);
-            }
-        });
+                <strong>Waktu tempuh:</strong> ${duration.toFixed(1)} menit<br>
+                <strong>SMART Score:</strong> ${smartScore}
+            `;
+
+            marker.bindPopup(popupContent);
+        }
+    });
     });
 }
 </script>

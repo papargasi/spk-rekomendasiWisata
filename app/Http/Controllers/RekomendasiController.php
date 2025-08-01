@@ -31,6 +31,7 @@ return view('rekomendasi', compact( 'wisataData'));
         'latitude' => 'required|numeric',
         'longitude' => 'required|numeric',
         'rating' => 'required|numeric',
+        'kebersihan' => 'required|numeric',
         'foto.*' => 'image|mimes:jpg,jpeg,png|max:2048'
     ]);
 
@@ -42,6 +43,7 @@ return view('rekomendasi', compact( 'wisataData'));
         'latitude' => $request->latitude,
         'longitude' => $request->longitude,
         'rating' => $request->rating, // default atau boleh dihilangkan kalau tidak dipakai sekarang
+        'kebersihan' => $request->kebersihan,
     ]);
 
     // Simpan setiap foto ke storage dan database
@@ -80,12 +82,14 @@ public function updateRating(Request $request, $id)
 {
     $request->validate([
         'rating' => 'required',
+        'kebersihan' => 'required',
     ]);
 
     $wisata = Wisata::findOrFail($id);
 
     $wisata->update([
         'rating' => $request->rating,
+        'kebersihan' => $request->kebersihan,
     ]);
 
     return redirect('dataOwi')->with('success', 'Data wisata dan foto berhasil ditambahkan!');
